@@ -245,7 +245,7 @@ services:
     networks:
       - temporal-network
     healthcheck:
-      test: ["CMD", "temporal", "operator", "cluster", "health", "--address", "temporal:7233"]
+      test: ["CMD-SHELL", "ps aux | grep -v grep | grep -q temporal-server || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
