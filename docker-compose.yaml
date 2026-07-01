@@ -1,14 +1,14 @@
 services:
   postiz:
-    image: ghcr.io/gitroomhq/postiz-app:latest
+    image: ghcr.io/gitroomhq/postiz-app:v2.21.9
     container_name: postiz
     restart: always
     environment:
       # === Required Settings
-      MAIN_URL: 'http://localhost:4007'
-      FRONTEND_URL: 'http://localhost:4007'
-      NEXT_PUBLIC_BACKEND_URL: 'http://localhost:4007/api'
-      JWT_SECRET: 'random string that is unique to every install - just type random characters here!'
+      MAIN_URL: 'https://postiz.lainup.fr'
+      FRONTEND_URL: 'https://postiz.lainup.fr'
+      NEXT_PUBLIC_BACKEND_URL: 'https://postiz.lainup.fr/api'
+      JWT_SECRET: '96422cc8d97d4ff203f4bbe0377b5887e06ddb012f067cf709919d371a93fcd9303709e01f69bd339dcc22d014163ed7'
       DATABASE_URL: 'postgresql://postiz-user:postiz-password@postiz-postgres:5432/postiz-db-local'
       REDIS_URL: 'redis://postiz-redis:6379'
       BACKEND_INTERNAL_URL: 'http://localhost:3000'
@@ -112,8 +112,6 @@ services:
     volumes:
       - postiz-config:/config/
       - postiz-uploads:/uploads/
-    ports:
-      - "4007:5000"
     networks:
       - postiz-network
       - temporal-network
@@ -227,8 +225,6 @@ services:
   temporal:
     container_name: temporal
     restart: always
-    ports:
-      - '7233:7233'
     image: temporalio/auto-setup:1.28.1
     depends_on:
       temporal-postgresql:
@@ -283,8 +279,6 @@ services:
       - TEMPORAL_CORS_ORIGINS=http://127.0.0.1:3000
     networks:
       - temporal-network
-    ports:
-      - '8080:8080'
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
       interval: 30s
